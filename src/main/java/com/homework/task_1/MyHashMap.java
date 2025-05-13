@@ -6,6 +6,7 @@ public class MyHashMap<K, V>{
 
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private static final int MAXIMUM_CAPACITY = 1 << 30;
 
     static class Node<K, V>{
         final int hash;
@@ -44,18 +45,41 @@ public class MyHashMap<K, V>{
             if (o == this){
                 return true;
             }
-
             if (o instanceof Node){
                 Node<?, ?> e = (Node<?, ?>) o;
                 return Objects.equals(key, e.getKey())
                     && Objects.equals(value, e.getValue());
             }
-
             return false;
         }
     }
 
     private Node<K, V>[] table;
+    private int size;
+    private int threshold;
+    private final float loadFactor;
+
+    public MyHashMap(int initialCapacity, float loadFactor){
+        if (initialCapacity < 0){
+            throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
+        }
+        if (initialCapacity > MAXIMUM_CAPACITY){
+            initialCapacity = MAXIMUM_CAPACITY;
+        }
+        if (loadFactor <= 0 || Float.isNaN(loadFactor)){
+            throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
+        }
+        this.loadFactor = loadFactor;
+        this.threshold = (int)(DEFAULT_CAPACITY * loadFactor);
+    }
+
+    public MyHashMap(int initialCapacity){
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public MyHashMap(){
+        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+    }
 
     static final int hash(Object key){
         if (key != null){
