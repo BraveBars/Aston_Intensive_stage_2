@@ -4,6 +4,9 @@ import java.util.Objects;
 
 public class MyHashMap<K, V>{
 
+    private static final int DEFAULT_CAPACITY = 16;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
     static class Node<K, V>{
         final int hash;
         final K key;
@@ -50,6 +53,16 @@ public class MyHashMap<K, V>{
 
             return false;
         }
+    }
+
+    private Node<K, V>[] table;
+
+    static final int hash(Object key){
+        if (key != null){
+            int h = key.hashCode();
+            return h ^ (h >>> 16);
+        }
+        return 0;
     }
 }
 
