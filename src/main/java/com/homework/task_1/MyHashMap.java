@@ -88,6 +88,54 @@ public class MyHashMap<K, V>{
         }
         return 0;
     }
+
+    public int size(){
+        return size;
+    }
+
+    public V put(K key, V value) {
+        int h = hash(key);
+        int index = (table.length - 1) & h;
+
+        for (Node<K, V> e = table[index]; e != null; e = e.next) {
+            if (e.hash == h && Objects.equals(e.key, key)) {
+                V oldValue = e.value;
+                e.value = value;
+                return oldValue;
+            }
+        }
+
+        Node<K, V> newNode = new Node<>(h, key, value, table[index]);
+        table[index] = newNode;
+        if (++size > threshold) {
+            resize();
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void resize(){
+        int oldCapacity = table.length;
+        int newCapacity = oldCapacity << 1;
+        if (oldCapacity >= MAXIMUM_CAPACITY) {
+            threshold = Integer.MAX_VALUE;
+            return;
+        }
+        Node<K, V>[] oldTable = table;
+        Node<K, V>[] newTable = (Node<K, V>[]) new Node[newCapacity];
+
+        for (Node<K, V> e: oldTable) {
+            while (e != null) {
+                Node<K, V> next = e.next;
+                int index = (newCapacity -1) & e.hash;
+                e.next = newTable[index];
+                newTable[index] = e;
+                e = next;
+            }
+        }
+        table = newTable;
+        threshold = (int) (newCapacity * loadFactor);
+    }
 }
 
 
