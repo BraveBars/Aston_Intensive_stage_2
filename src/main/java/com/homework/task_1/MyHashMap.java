@@ -71,7 +71,7 @@ public class MyHashMap<K, V>{
             throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
         }
         this.loadFactor = loadFactor;
-        this.threshold = (int)(DEFAULT_CAPACITY * loadFactor);
+        this.threshold = (int)(initialCapacity * loadFactor);
         this.table = (Node<K, V>[]) new Node[initialCapacity];
     }
 
