@@ -93,6 +93,11 @@ public class MyHashMap<K, V>{
         return size;
     }
 
+//    private int getBucketIndex(K key){
+//        int h = hash(key);
+//        return (table.length - 1) & h;
+//    }
+
     public V put(K key, V value) {
         int h = hash(key);
         int index = (table.length - 1) & h;
@@ -148,7 +153,23 @@ public class MyHashMap<K, V>{
         return null;
     }
 
-
+    public V remove(Object key){
+        int h = hash(key);
+        int index = (table.length - 1) & h;
+        Node<K, V> prev = null;
+        for (Node<K, V> e = table[index]; e != null; prev = e, e = e.next){
+            if(e.hash == h && Objects.equals(e.key, key)){
+                if(prev == null){
+                    table[index] = e.next;
+                }else {
+                    prev.next = e.next;
+                }
+                size--;
+                return e.value;
+            }
+        }
+        return null;
+    }
 }
 
 
