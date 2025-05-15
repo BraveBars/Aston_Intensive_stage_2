@@ -59,6 +59,7 @@ public class MyHashMap<K, V>{
     private int threshold;
     private final float loadFactor;
 
+    @SuppressWarnings("unchecked")
     public MyHashMap(int initialCapacity, float loadFactor){
         if (initialCapacity < 0){
             throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
@@ -71,6 +72,7 @@ public class MyHashMap<K, V>{
         }
         this.loadFactor = loadFactor;
         this.threshold = (int)(DEFAULT_CAPACITY * loadFactor);
+        this.table = (Node<K, V>[]) new Node[initialCapacity];
     }
 
     public MyHashMap(int initialCapacity){
@@ -92,11 +94,6 @@ public class MyHashMap<K, V>{
     public int size(){
         return size;
     }
-
-//    private int getBucketIndex(K key){
-//        int h = hash(key);
-//        return (table.length - 1) & h;
-//    }
 
     public V put(K key, V value) {
         int h = hash(key);
