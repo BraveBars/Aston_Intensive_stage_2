@@ -136,6 +136,19 @@ public class MyHashMap<K, V>{
         table = newTable;
         threshold = (int) (newCapacity * loadFactor);
     }
+
+    public V get(Object key){
+        int h = hash(key);
+        int index = (table.length - 1) & h;
+        for (Node<K, V> e = table[index]; e != null; e = e.next) {
+            if (e.hash == h && Objects.equals(e.key, key)) {
+                return e.value;
+            }
+        }
+        return null;
+    }
+
+
 }
 
 
