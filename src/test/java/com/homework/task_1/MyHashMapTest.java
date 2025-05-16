@@ -71,4 +71,29 @@ public class MyHashMapTest {
             assertEquals("value" + i, map.get(i));
         }
     }
+
+    @Test
+    void testTableSizeFor() {
+        int expectedSize = 1;
+
+        for (int i = 0; i < 130; i++){
+            assertEquals(expectedSize, MyHashMap.tableSizeFor(i));
+
+            if(i == expectedSize){
+                expectedSize *= 2;
+            }
+        }
+
+        assertEquals(1 << 30, MyHashMap.tableSizeFor((1 << 30) + 100));
+    }
+
+    @Test
+    void testToString(){
+        map.put("a", 1);
+        map.put("b", 2);
+        String str = map.toString();
+
+        assertTrue(str.startsWith("{") && str.endsWith("}"));
+        assertTrue(str.contains("a = 1") && str.contains("b = 2"));
+    }
 }
