@@ -1,5 +1,6 @@
 package com.homework.task_1;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MyHashMap<K, V>{
@@ -166,6 +167,23 @@ public class MyHashMap<K, V>{
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        boolean first = true;
+        for (Node<K, V> bucket: table) {
+            for (Node<K, V> e = bucket; e != null; e = e.next){
+                if(!first){
+                    sb.append(", ");
+                }
+                sb.append(e.toString());
+                first = false;
+            }
+        }
+        sb.append("}");
+        return sb.toString();
     }
 }
 
