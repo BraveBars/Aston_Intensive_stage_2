@@ -38,4 +38,37 @@ public class MyHashMapTest {
         assertEquals(2, map.get("key"));
         assertEquals(1,map.size());
     }
+
+    @Test
+    void testRemove(){
+        assertNull(map.remove("NotExists"));
+        map.put("key", 5);
+        assertEquals(5, map.remove("key"));
+        assertNull(map.get("key"));
+    }
+
+    @Test
+    void testSize(){
+        assertEquals(0, map.size());
+        map.put("key", 1);
+        map.put("key2", 2);
+        map.put(null, 3);
+
+        assertEquals(3, map.size());
+        map.remove("key2");
+        assertEquals(2, map.size());
+        map.remove(null);
+        assertEquals(1, map.size());
+    }
+
+    @Test
+    void testResize(){
+        MyHashMap<Integer, String> map = new MyHashMap<>(2, 0.75f);
+
+        for (int i = 0; i < 130; i++){
+            map.put(i, "value" + i);
+            assertEquals(i + 1, map.size());
+            assertEquals("value" + i, map.get(i));
+        }
+    }
 }
