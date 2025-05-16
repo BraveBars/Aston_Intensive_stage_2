@@ -39,7 +39,7 @@ public class MyHashMap<K, V>{
         }
 
         public final int hashCode(){
-            return (Objects.hashCode(key) ^ value.hashCode());
+            return (Objects.hashCode(key) ^ Objects.hashCode(value));
         }
 
         public final boolean equals(Object o){
