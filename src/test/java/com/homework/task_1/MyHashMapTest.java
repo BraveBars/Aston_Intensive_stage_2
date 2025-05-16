@@ -96,4 +96,22 @@ public class MyHashMapTest {
         assertTrue(str.startsWith("{") && str.endsWith("}"));
         assertTrue(str.contains("a = 1") && str.contains("b = 2"));
     }
+
+    @Test
+    void testConstructorExceptions(){
+        Exception e = assertThrows(IllegalArgumentException.class, () -> {
+            new MyHashMap<>(-1);
+        });
+        assertTrue(e.getMessage().contains("Illegal initial capacity: -1"));
+
+        Exception e2 = assertThrows(IllegalArgumentException.class, () -> {
+            new MyHashMap<>(2, -0.5f);
+        });
+        assertTrue(e2.getMessage().contains("Illegal load factor: -0.5"));
+
+        Exception e3 = assertThrows(IllegalArgumentException.class, () -> {
+            new MyHashMap<>(2, Float.NaN);
+        });
+        assertTrue(e3.getMessage().contains("Illegal load factor: NaN"));
+    }
 }
