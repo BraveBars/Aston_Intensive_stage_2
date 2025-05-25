@@ -1,11 +1,6 @@
 package com.homework.task_2;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -17,30 +12,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Имя не может быть пустым")
     @Column(nullable = false)
     private String name;
 
-    @Email(message = "Некорректный формат email")
-    @NotBlank(message = "Email не может быть пустым")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Min(value = 0, message = "возраст не может быть отрицательным")
-    @Max(value = 150, message = "возраст не может быть больше 150 лет")
     @Column(nullable = false)
     private Integer age;
 
-    @Column(nullable = false)
-    private LocalDateTime created_at;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    public User(){};
+    public User() { }
 
-    public User(String name, String email, Integer age, LocalDateTime created_at) {
+    public User(String name, String email, Integer age) {
         this.name = name;
         this.email = email;
-        this.age = age;
-        this.created_at = created_at;
+        this.age  = age;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -71,8 +65,8 @@ public class User {
         this.age = age;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @Override
@@ -82,15 +76,20 @@ public class User {
                ", name='" + name + '\'' +
                ", email='" + email + '\'' +
                ", age=" + age +
-               ", created_at=" + created_at +
+               ", createdAt=" + createdAt +
                '}';
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(age, user.age);
+        return Objects.equals(id, user.id)
+               && Objects.equals(name, user.name)
+               && Objects.equals(email, user.email)
+               && Objects.equals(age, user.age);
     }
 
     @Override
