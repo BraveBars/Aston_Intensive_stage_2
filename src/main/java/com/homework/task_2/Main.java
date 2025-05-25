@@ -2,9 +2,15 @@ package com.homework.task_2;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
     private static final UserDao userDao = new UserDaoImpl();
+
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[\\p{L} ]{2,50}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"
+    );
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -27,7 +33,7 @@ public class Main {
                 case "4" -> updateUser(scanner);
                 case "5" -> deleteUser(scanner);
                 case "0" -> running = false;
-                default  -> System.out.println("Неверный выбор. Попробуйте ещё раз.");
+                default -> System.out.println("Неверный выбор. Попробуйте ещё раз.");
             }
         }
 
@@ -35,22 +41,19 @@ public class Main {
         scanner.close();
     }
 
-    private static void createUser(Scanner sc) {
-        System.out.print("Введите имя: ");
-        String name = sc.nextLine();
-        System.out.print("Введите email: ");
-        String email = sc.nextLine();
-        System.out.print("Введите возраст: ");
-        int age = Integer.parseInt(sc.nextLine());
+    private static void createUser(Scanner scanner) {
+        String name = readValidName(scanner);
+        String email = readValidEmail(scanner);
+        int age = readValidAge(scanner);
 
         User user = new User(name, email, age);
         userDao.create(user);
         System.out.println("Пользователь создан: " + user);
     }
 
-    private static void readUser(Scanner sc) {
+    private static void readUser(Scanner scanner) {
         System.out.print("Введите ID пользователя: ");
-        long id = Long.parseLong(sc.nextLine());
+        long id = Long.parseLong(scanner.nextLine().trim());
         User user = userDao.read(id);
         if (user != null) {
             System.out.println("Найден пользователь: " + user);
@@ -69,35 +72,99 @@ public class Main {
         }
     }
 
-    private static void updateUser(Scanner sc) {
+    private static void updateUser(Scanner scanner) {
         System.out.print("Введите ID пользователя для обновления: ");
-        long id = Long.parseLong(sc.nextLine());
+        long id = Long.parseLong(scanner.nextLine().trim());
         User user = userDao.read(id);
         if (user == null) {
             System.out.println("Пользователь с ID " + id + " не найден.");
             return;
         }
 
+        System.out.println("Оставьте поле пустым, чтобы не менять.");
+
         System.out.print("Новое имя (" + user.getName() + "): ");
-        String name = sc.nextLine();
-        if (!name.isBlank()) user.setName(name);
+        String nameInput = scanner.nextLine().trim();
+        if (!nameInput.isBlank()) {
+            if (NAME_PATTERN.matcher(nameInput).matches()) {
+                user.setName(nameInput);
+            } else {
+                System.out.println("Имя не изменено — неверный формат.");
+            }
+        }
 
         System.out.print("Новый email (" + user.getEmail() + "): ");
-        String email = sc.nextLine();
-        if (!email.isBlank()) user.setEmail(email);
+        String emailInput = scanner.nextLine().trim();
+        if (!emailInput.isBlank()) {
+            if (EMAIL_PATTERN.matcher(emailInput).matches()) {
+                user.setEmail(emailInput);
+            } else {
+                System.out.println("Email не изменён — неверный формат.");
+            }
+        }
 
         System.out.print("Новый возраст (" + user.getAge() + "): ");
-        String ageInput = sc.nextLine();
-        if (!ageInput.isBlank()) user.setAge(Integer.parseInt(ageInput));
+        String ageInput = scanner.nextLine().trim();
+        if (!ageInput.isBlank()) {
+            try {
+                int age = Integer.parseInt(ageInput);
+                if (age >= 1 && age <= 150) {
+                    user.setAge(age);
+                } else {
+                    System.out.println("Возраст не изменён — вне диапазона.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Возраст не изменён — неверный ввод.");
+            }
+        }
 
         userDao.update(user);
         System.out.println("Данные пользователя обновлены: " + user);
     }
 
-    private static void deleteUser(Scanner sc) {
+    private static void deleteUser(Scanner scanner) {
         System.out.print("Введите ID пользователя для удаления: ");
-        long id = Long.parseLong(sc.nextLine());
+        long id = Long.parseLong(scanner.nextLine().trim());
         userDao.delete(id);
         System.out.println("Пользователь с ID " + id + " удалён.");
+    }
+
+    private static String readValidName(Scanner scanner) {
+        while (true) {
+            System.out.print("Введите имя (2–50 букв): ");
+            String name = scanner.nextLine().trim();
+            if (NAME_PATTERN.matcher(name).matches()) {
+                return name;
+            }
+            System.out.println("Неверный формат имени. Разрешены только буквы и пробелы.");
+        }
+    }
+
+    private static String readValidEmail(Scanner scanner) {
+        while (true) {
+            System.out.print("Введите email: ");
+            String email = scanner.nextLine().trim();
+            if (EMAIL_PATTERN.matcher(email).matches()) {
+                return email;
+            }
+            System.out.println("Неверный формат email. Например: example@example.com");
+        }
+    }
+
+    private static int readValidAge(Scanner scanner) {
+        while (true) {
+            System.out.print("Введите возраст от 1 до 150): ");
+            String input = scanner.nextLine().trim();
+            try {
+                int age = Integer.parseInt(input);
+                if (age >= 1 && age <= 150) {
+                    return age;
+                } else {
+                    System.out.println("Возраст должен быть от 1 до 150.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Введите целое число.");
+            }
+        }
     }
 }
