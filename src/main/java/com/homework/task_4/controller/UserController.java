@@ -1,7 +1,7 @@
 package com.homework.task_4.controller;
 
-import com.homework.task_4.service.UserService;
 import com.homework.task_4.dto.UserDto;
+import com.homework.task_4.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
