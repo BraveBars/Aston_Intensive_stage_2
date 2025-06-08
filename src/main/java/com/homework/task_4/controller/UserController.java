@@ -32,13 +32,14 @@ public class UserController {
     public ResponseEntity<UserDto> create(@Valid @RequestBody UserDto dto) {
         UserDto created = svc.create(dto);
         return ResponseEntity
-                .created(URI.create("/api/users" + created.getId()))
+                .created(URI.create("/api/users/" + created.getId()))
                 .body(created);
     }
 
     @PutMapping("/{id}")
-    public UserDto update(@PathVariable Long id,@Valid @RequestBody UserDto dto) {
-        return svc.update(id, dto);
+    public ResponseEntity<UserDto> update(@PathVariable Long id, @Valid @RequestBody UserDto dto) {
+        UserDto updated = svc.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
