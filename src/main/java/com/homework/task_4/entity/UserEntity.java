@@ -85,10 +85,10 @@ public class UserEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return age == that.age
-               && Objects.equals(id, that.id)
+        return Objects.equals(id, that.id)
                && Objects.equals(name, that.name)
-               && Objects.equals(email, that.email);
+               && Objects.equals(email, that.email)
+               && Objects.equals(age, that.age);
     }
 
     @Override
