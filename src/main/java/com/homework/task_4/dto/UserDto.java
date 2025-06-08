@@ -2,6 +2,8 @@ package com.homework.task_4.dto;
 
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDateTime;
+
 public class UserDto {
     private Long id;
 
@@ -13,8 +15,11 @@ public class UserDto {
     @NotBlank
     private String email;
 
-    @Min(1) @Max(150)
+    @Min(1)
+    @Max(150)
     private Integer age;
+
+    private LocalDateTime createdAt;
 
     public UserDto(){};
 
@@ -48,5 +53,13 @@ public class UserDto {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
