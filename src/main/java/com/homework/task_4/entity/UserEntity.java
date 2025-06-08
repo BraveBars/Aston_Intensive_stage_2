@@ -20,7 +20,7 @@ public class UserEntity {
     private String email;
 
     @Column(nullable = false)
-    private int age;
+    private Integer age;
 
     @Column(name = "created_At", nullable = false, updatable = false)
     private LocalDateTime createdAt;
