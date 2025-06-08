@@ -1,6 +1,5 @@
 package com.homework.task_4.service;
 
-import com.homework.task_2.User;
 import com.homework.task_4.dto.UserDto;
 
 import java.util.List;

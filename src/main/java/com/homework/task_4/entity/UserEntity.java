@@ -25,10 +25,7 @@ public class UserEntity {
     @Column(name = "created_At", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public UserEntity() {
-    }
-
-    ;
+    public UserEntity() {}
 
     public UserEntity(String name, String email, int age) {
         this.name = name;
@@ -36,6 +33,7 @@ public class UserEntity {
         this.age = age;
     }
 
+    @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }

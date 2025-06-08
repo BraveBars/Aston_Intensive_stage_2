@@ -1,9 +1,19 @@
 package com.homework.task_4.dto;
 
+import jakarta.validation.constraints.*;
+
 public class UserDto {
     private Long id;
+
+    @NotBlank
+    @Size(min=2, max=50)
     private String name;
+
+    @Email
+    @NotBlank
     private String email;
+
+    @Min(1) @Max(150)
     private Integer age;
 
     public UserDto(){};

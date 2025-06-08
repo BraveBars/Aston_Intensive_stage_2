@@ -2,7 +2,7 @@ package com.homework.task_4.service;
 
 import com.homework.task_4.entity.UserEntity;
 import com.homework.task_4.mapper.UserMapper;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import com.homework.task_4.dto.UserDto;
 import com.homework.task_4.repository.UserRepository;
